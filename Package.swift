@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "SnazzyNavigationView",
+	platforms: [.iOS(.v13),.macOS(.v10_15)],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -23,6 +24,6 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "SnazzyNavigationViewTests",
-            dependencies: ["SnazzyNavigationView"]),
+            dependencies: ["SnazzyNavigationView"])
     ]
 )
