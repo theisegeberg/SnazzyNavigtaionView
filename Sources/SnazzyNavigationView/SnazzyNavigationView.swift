@@ -1,16 +1,16 @@
 import SwiftUI
 
-public struct SnazzyNavigationView<T: Identifiable>: View {
+public struct SnazzyNavigationView<T, Navigator: Navigating>: View where Navigator.NavigatableState == T {
 
-	public typealias ResolverType = (T, TopLevelNavigator<T>) -> AnyView
+	public typealias ResolverType = (T, Navigator) -> AnyView
 
-	@ObservedObject var navigator: TopLevelNavigator<T>
+	@ObservedObject var navigator: Navigator
 
 	let resolver: ResolverType
 
 	public init(initialState: T, _ resolver:@escaping ResolverType) {
 		self.resolver = resolver
-		self.navigator = TopLevelNavigator<T>(ViewTransition(view: initialState, direction: .leading, unwoundDirection: nil))
+		self.navigator = Navigator(view: initialState)
 	}
 
 	func getView(_ state: T) -> AnyView {
@@ -19,9 +19,8 @@ public struct SnazzyNavigationView<T: Identifiable>: View {
 
 	public var body: some View {
 		VStack {
-			Group {
-				getView(self.navigator.currentTransition.view)
-			}.modifier(OpposingMoveTransitionModifier(edge: self.$navigator.currentTransition.direction))
+			getView(self.navigator.currentTransition.view)
+				.modifier(OpposingMoveTransitionModifier(edge: self.$navigator.currentTransition.edge))
 		}
 
 	}

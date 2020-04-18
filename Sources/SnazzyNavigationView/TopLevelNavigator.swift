@@ -1,44 +1,87 @@
 import SwiftUI
 
-public class TopLevelNavigator<T:Identifiable>: ObservableObject, Navigating {
+public class TopLevelNavigator<T: Identifiable>: ObservableObject, Navigating {
 
-	typealias TransitionType = ViewTransition<T>
+	public typealias TransitionType = ViewTransition<T>
 
 	var history: [TransitionType]
 
-	@Published var currentTransition: TransitionType
+	@Published public var currentTransition: TransitionType
 
-	init(_ initialTransition: TransitionType) {
+	public var currentView: T {
+		return self.history.first!.view
+	}
+
+	required public init(view initialView: T) {
+		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
 	}
 
-	func transition(_ transition: TransitionType) {
-		self.history.append(transition)
+	func transition(_ transition: TransitionType, clearHistory: Bool) {
+		if clearHistory {
+			self.history = [transition]
+		} else {
+			self.history.append(transition)
+		}
 		self.currentTransition = transition
 	}
 
+	public func transition(_ view: T, edge: Edge, clearHistory: Bool) {
+		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
+	}
+
 	public func transition(_ view: T, edge: Edge) {
-		self.transition(ViewTransition(view: view, direction: edge, unwoundDirection: nil))
+		self.transition(view, edge: edge, clearHistory: false)
 	}
 
 	public func unwind() {
+		self.unwind(.one)
+	}
+
+	public func unwind(_ distance: UnwindDistance) {
+
 		guard history.count > 1 else {
 			return
 		}
 
-		let current = history.popLast()!
-		let previous = history.popLast()!
+		let target: ViewTransition<T>
 
-		let state = previous.view
-		let direction: Edge
-		if let unwoundDirection = current.unwoundDirection {
-			direction = unwoundDirection
-		} else {
-			direction = current.direction
+		switch distance {
+			case .one:
+				self.unwind(.upTo(1))
+				return
+			case .root:
+				self.unwind(.upTo(self.history.count))
+			case .upTo(let goBackToIndex):
+				let targetIndex: Int
+
+				if history.count > goBackToIndex {
+					targetIndex = history.count - goBackToIndex - 1
+				} else {
+					targetIndex = 0
+				}
+
+				target = history[targetIndex]
+				let current = history.last!
+
+				history = Array(history[0..<targetIndex])
+
+				let state = target.view
+				let edge: Edge
+				if let unwoundEdge = current.unwoundEdge {
+					edge = unwoundEdge
+				} else {
+					edge = current.edge
+				}
+
+				self.transition(ViewTransition(view: state, edge: edge.opposing, unwoundEdge: target.edge), clearHistory: false)
 		}
 
-		self.transition(ViewTransition(view: state, direction: direction.opposing, unwoundDirection: previous.direction))
+	}
+
+	public func canUnwind() -> Bool {
+		return (history.count > 1)
 	}
 
 }

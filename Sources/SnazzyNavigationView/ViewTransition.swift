@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ViewTransition<T: Identifiable> {
+public struct ViewTransition<T: Identifiable> {
 	let view: T
-	var direction: Edge
-	let unwoundDirection: Edge?
+	var edge: Edge
+	let unwoundEdge: Edge?
 }
