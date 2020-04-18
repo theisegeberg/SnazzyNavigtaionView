@@ -1,6 +1,6 @@
 import SwiftUI
 
-public class TopLevelNavigator<T: Identifiable>: ObservableObject, Navigating {
+public class SnazzyNavigator<T: Identifiable>: ObservableObject, Navigating {
 
 	public typealias TransitionType = ViewTransition<T>
 
