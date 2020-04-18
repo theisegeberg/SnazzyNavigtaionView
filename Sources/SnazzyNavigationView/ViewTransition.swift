@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct ViewTransition<T: Identifiable> {
+struct ViewTransition<T: SnazzyState> {
 	let view: T
 	var edge: Edge
 	let unwoundEdge: Edge?

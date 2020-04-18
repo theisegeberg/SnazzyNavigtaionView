@@ -1,18 +1,14 @@
 import SwiftUI
 
-public class SnazzyNavigator<T: Identifiable>: ObservableObject, Navigating {
+class SnazzyNavigator<T: SnazzyState>: ObservableObject, Navigating {
 
-	public typealias TransitionType = ViewTransition<T>
+	typealias TransitionType = ViewTransition<T>
 
 	var history: [TransitionType]
 
-	@Published public var currentTransition: TransitionType
+	@Published var currentTransition: TransitionType
 
-	public var currentView: T {
-		return self.history.first!.view
-	}
-
-	required public init(view initialView: T) {
+	init(view initialView: T) {
 		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
@@ -27,19 +23,19 @@ public class SnazzyNavigator<T: Identifiable>: ObservableObject, Navigating {
 		self.currentTransition = transition
 	}
 
-	public func transition(_ view: T, edge: Edge, clearHistory: Bool) {
+	func transition(_ view: T, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
 	}
 
-	public func transition(_ view: T, edge: Edge) {
+	func transition(_ view: T, edge: Edge) {
 		self.transition(view, edge: edge, clearHistory: false)
 	}
 
-	public func unwind() {
+	func unwind() {
 		self.unwind(.one)
 	}
 
-	public func unwind(_ distance: UnwindDistance) {
+	func unwind(_ distance: UnwindDistance) {
 
 		guard history.count > 1 else {
 			return
@@ -80,7 +76,7 @@ public class SnazzyNavigator<T: Identifiable>: ObservableObject, Navigating {
 
 	}
 
-	public func canUnwind() -> Bool {
+	func canUnwind() -> Bool {
 		return (history.count > 1)
 	}
 
