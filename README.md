@@ -4,8 +4,6 @@ Based on SwiftUI this view handles navigation between views in a simple and appe
 
 ## Getting Started
 
-Install 
-
 ### Prerequisites
 
 - iOS 13.0+ / macOS 10.15+ 
@@ -14,18 +12,20 @@ Install
 
 ### Installing
 
-### Swift Package Manager
-More info here: [Swift Package Manager](https://swift.org/package-manager/).
+#### In Xcode
+Open an iOS or MacOS project in Xcode and go to:
+`File -> Swift Packages -> Add Package Dependency...`
+There copy the repo url in the text field:
+`https://github.com/theisegeberg/SnazzyNavigtaionView.git`
 
-You can either manually edit the `dependencies` in `Package.swift`...
+#### In Package.swift
+Manually add to the `dependencies` in `Package.swift`...
 
 ```swift
 dependencies: [
 .package(url: "https://github.com/theisegeberg/SnazzyNavigtaionView.git", .upToNextMajor(from: "0.1.0"))
 ]
 ```
-
-Or you can open an iOS or MacOS project in Xcode and go to `File -> Swift Packages -> Add Package Dependency...` there you can copy the repo url in: `https://github.com/theisegeberg/SnazzyNavigtaionView.git`
 
 ## Quick start
 
