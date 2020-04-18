@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension Edge {
-	var opposing:Edge {
+	var opposing: Edge {
 		switch self {
 			case .bottom:
 				return .top

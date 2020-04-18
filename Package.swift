@@ -5,12 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "SnazzyNavigationView",
-	platforms: [.iOS(.v13),.macOS(.v10_15)],
+	platforms: [.iOS(.v13), .macOS(.v10_15)],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "SnazzyNavigationView",
-            targets: ["SnazzyNavigationView"]),
+            targets: ["SnazzyNavigationView"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
