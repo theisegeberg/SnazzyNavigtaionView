@@ -35,172 +35,172 @@ import SwiftUI
 import SnazzyNavigationView
 
 enum ViewState: SnazzyState {
-case a, b(String), c
+	case a, b(String), c
 }
 
 extension View {
-func eraseToAnyView() -> AnyView {
-return AnyView(self)
-}
+	func eraseToAnyView() -> AnyView {
+		return AnyView(self)
+	}
 }
 
 struct ContentView: View {
-var body:some View {
-SnazzyNavigationView(initialState: ViewState.a) { (state, navigator) -> AnyView in
-switch state {
-case .a:
-let viewModel = ViewA.ViewModel(title: "x", navigating: navigator)
-return ViewA(model: viewModel).eraseToAnyView()
-case .b(let text):
-let viewModel = ViewB.ViewModel(title: text, navigating: navigator)
-return ViewB(model: viewModel).eraseToAnyView()
-case .c:
-let viewModel = ViewC.ViewModel(title: "X", navigating: navigator)
-return ViewC(model: viewModel).eraseToAnyView()
-}
-}
-}
+	var body:some View {
+		SnazzyNavigationView(initialState: ViewState.a) { (state, navigator) -> AnyView in
+			switch state {
+				case .a:
+					let viewModel = ViewA.ViewModel(title: "x", navigating: navigator)
+					return ViewA(model: viewModel).eraseToAnyView()
+				case .b(let text):
+					let viewModel = ViewB.ViewModel(title: text, navigating: navigator)
+					return ViewB(model: viewModel).eraseToAnyView()
+				case .c:
+					let viewModel = ViewC.ViewModel(title: "X", navigating: navigator)
+					return ViewC(model: viewModel).eraseToAnyView()
+			}
+		}
+	}
 }
 
 struct ViewA: View {
 
-struct ViewModel {
-let title: String
-let navigating: AnyNavigator<ViewState>
-}
+	struct ViewModel {
+		let title: String
+		let navigating: AnyNavigator<ViewState>
+	}
 
-var model: ViewModel
+	var model: ViewModel
 
-var body: some View {
-VStack {
+	var body: some View {
+		VStack {
 
-Button(action: {
-withAnimation {
-self.model.navigating.transition(.b("Hello world"), edge: .trailing)
-}
-}) {
-Text(">>")
-}
-Button(action: {
-withAnimation {
-self.model.navigating.unwind()
-}
-}) {
-Text("unwind")
-}
-Color.red
-}.frame(maxWidth: .infinity)
-}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.transition(.b("Hello world"), edge: .trailing)
+				}
+			}) {
+				Text(">>")
+			}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.unwind()
+				}
+			}) {
+				Text("unwind")
+			}
+			Color.red
+		}.frame(maxWidth: .infinity)
+	}
 }
 
 struct ViewB: View {
 
-struct ViewModel {
-let title: String
-let navigating: AnyNavigator<ViewState>
-}
+	struct ViewModel {
+		let title: String
+		let navigating: AnyNavigator<ViewState>
+	}
 
-var model: ViewModel
+	var model: ViewModel
 
-@State var someText = UUID().uuidString
+	@State var someText = UUID().uuidString
 
-var body: some View {
-VStack {
-HStack {
-Button(action: {
-withAnimation {
-self.model.navigating.transition(.a, edge: .leading)
-}
-}) {
-Text("<<")
-}
+	var body: some View {
+		VStack {
+			HStack {
+				Button(action: {
+					withAnimation {
+						self.model.navigating.transition(.a, edge: .leading)
+					}
+				}) {
+					Text("<<")
+				}
 
-Button(action: {
-self.model.navigating.transition(.b("Hullaballoo"), edge: .trailing)
-}) {
-Text("stay")
-}
+				Button(action: {
+					self.model.navigating.transition(.b("Hullaballoo"), edge: .trailing)
+				}) {
+					Text("stay")
+				}
 
-Button(action: {
-withAnimation {
-self.model.navigating.unwind()
-}
-}) {
-Text("unwind")
-}
+				Button(action: {
+					withAnimation {
+						self.model.navigating.unwind()
+					}
+				}) {
+					Text("unwind")
+				}
 
-Button(action: {
-withAnimation {
-self.model.navigating.transition(.c, edge: .bottom)
-}
-}) {
-Text(">>")
-}
-}
-Button(action: {
-self.someText = UUID().uuidString
-}) {
-Text("change state")
-}
-Text(model.title)
-Text(self.someText)
-Color.orange
-}.frame(maxWidth: .infinity)
+				Button(action: {
+					withAnimation {
+						self.model.navigating.transition(.c, edge: .bottom)
+					}
+				}) {
+					Text(">>")
+				}
+			}
+			Button(action: {
+				self.someText = UUID().uuidString
+			}) {
+				Text("change state")
+			}
+			Text(model.title)
+			Text(self.someText)
+			Color.orange
+		}.frame(maxWidth: .infinity)
 
-}
+	}
 }
 
 struct ViewC: View {
 
-struct ViewModel {
-let title: String
-let navigating: AnyNavigator<ViewState>
-}
+	struct ViewModel {
+		let title: String
+		let navigating: AnyNavigator<ViewState>
+	}
 
-var model: ViewModel
+	var model: ViewModel
 
-var body: some View {
+	var body: some View {
 
-VStack {
-Button(action: {
-withAnimation {
-self.model.navigating.transition(.b("From before"), edge: .leading)
-}
-}) {
-Text("<<")
-}
+		VStack {
+			Button(action: {
+				withAnimation {
+					self.model.navigating.transition(.b("From before"), edge: .leading)
+				}
+			}) {
+				Text("<<")
+			}
 
-Button(action: {
-withAnimation {
-self.model.navigating.transition(.a, edge: .trailing)
-}
-}) {
-Text(">>")
-}
-Button(action: {
-withAnimation {
-self.model.navigating.unwind(.upTo(2))
-}
-}) {
-Text("<<2")
-}
-Button(action: {
-withAnimation {
-self.model.navigating.unwind(.upTo(3))
-}
-}) {
-Text("<<3")
-}
-Button(action: {
-withAnimation {
-self.model.navigating.unwind()
-}
-}) {
-Text("unwind")
-}
-Color.blue
-}.frame(maxWidth: .infinity)
-}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.transition(.a, edge: .trailing)
+				}
+			}) {
+				Text(">>")
+			}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.unwind(.upTo(2))
+				}
+			}) {
+				Text("<<2")
+			}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.unwind(.upTo(3))
+				}
+			}) {
+				Text("<<3")
+			}
+			Button(action: {
+				withAnimation {
+					self.model.navigating.unwind()
+				}
+			}) {
+				Text("unwind")
+			}
+			Color.blue
+		}.frame(maxWidth: .infinity)
+	}
 }
 
 
