@@ -2,7 +2,7 @@
 
 Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic.
 
-[Example](https://i.imgur.com/0UuDX4Z.gif)
+![Example](https://i.imgur.com/0UuDX4Z.gif)
 
 ## Getting Started
 
