@@ -2,7 +2,7 @@
 
 Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic. The pseudo navigation bars below are completely optional, you can implement navigation in any way you want to.
 
-| ColorViewSample.swift | LoginSample.swift |
+| [ColorViewExample.swift](SampleCode/ColoredViewExample.swift) | [LoginExample.swift](SampleCode/LoginExample.swift) |
 | --- | --- |
 | ![Example1](https://i.imgur.com/0UuDX4Z.gif) | ![Example2](https://i.imgur.com/uKI29TJ.gif) |
 
@@ -33,7 +33,7 @@ dependencies: [
 
 ## Quick start
 
-**Full sample code with helpful commentary: [SampleCode/ColoredViewSample.swift](Sources/SnazzyNavigationView/SampleCode/ColoredViewSample.swift)**
+**Full sample code with helpful commentary: [SampleCode/ColoredViewExample.swift](SampleCode/ColoredViewExample.swift)**
 
 1. Import SwiftUI and SnazzyNavigationView
 ```swift
