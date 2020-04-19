@@ -19,8 +19,7 @@ public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 	let resolver: ResolverType
 
 	public init(initialState: NavigatableState, _ resolver:@escaping ResolverType) {
-		self.resolver = resolver
-		self.navigator = SnazzyNavigator(view: initialState)
+		self.init(navigator: SnazzyNavigator(view: initialState), resolver)
 	}
 	
 	public init(navigator:SnazzyNavigator<NavigatableState>, _ resolver:@escaping ResolverType) {
