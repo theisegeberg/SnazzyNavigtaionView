@@ -29,6 +29,15 @@ dependencies: [
 
 ## Quick start
 
+
+
+Import SwiftUI and SnazzyNavigationView
+```swift
+import SwiftUI
+import SnazzyNavigationView
+```
+
+
 ```swift
 
 import SwiftUI

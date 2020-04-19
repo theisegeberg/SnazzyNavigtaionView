@@ -1,14 +1,14 @@
 import SwiftUI
 
-class SnazzyNavigator<T: SnazzyState>: ObservableObject, Navigating {
+public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject, Navigating {
 
-	typealias TransitionType = ViewTransition<T>
+	typealias TransitionType = ViewTransition<NavigatableState>
 
 	var history: [TransitionType]
 
 	@Published var currentTransition: TransitionType
 
-	init(view initialView: T) {
+	init(view initialView: NavigatableState) {
 		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
@@ -23,25 +23,25 @@ class SnazzyNavigator<T: SnazzyState>: ObservableObject, Navigating {
 		self.currentTransition = transition
 	}
 
-	func transition(_ view: T, edge: Edge, clearHistory: Bool) {
+	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
 	}
 
-	func transition(_ view: T, edge: Edge) {
+	public func transition(_ view: NavigatableState, edge: Edge) {
 		self.transition(view, edge: edge, clearHistory: false)
 	}
 
-	func unwind() {
+	public func unwind() {
 		self.unwind(.one)
 	}
 
-	func unwind(_ distance: UnwindDistance) {
+	public func unwind(_ distance: UnwindDistance) {
 
 		guard history.count > 1 else {
 			return
 		}
 
-		let target: ViewTransition<T>
+		let target: ViewTransition<NavigatableState>
 
 		switch distance {
 			case .one:
@@ -76,7 +76,7 @@ class SnazzyNavigator<T: SnazzyState>: ObservableObject, Navigating {
 
 	}
 
-	func canUnwind() -> Bool {
+	public func canUnwind() -> Bool {
 		return (history.count > 1)
 	}
 
