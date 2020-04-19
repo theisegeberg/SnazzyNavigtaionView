@@ -21,12 +21,11 @@ public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 	public init(initialState: NavigatableState, _ resolver:@escaping ResolverType) {
 		self.init(navigator: SnazzyNavigator(view: initialState), resolver)
 	}
-	
-	public init(navigator:SnazzyNavigator<NavigatableState>, _ resolver:@escaping ResolverType) {
+
+	public init(navigator: SnazzyNavigator<NavigatableState>, _ resolver:@escaping ResolverType) {
 		self.resolver = resolver
 		self.navigator = navigator
 	}
-	
 
 	func getView(_ state: NavigatableState) -> AnyView {
 		return resolver(state, self.navigator)

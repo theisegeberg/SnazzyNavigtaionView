@@ -22,7 +22,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 		}
 		self.currentTransition = transition
 	}
-	
+
 	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
 	}

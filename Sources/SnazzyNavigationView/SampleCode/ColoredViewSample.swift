@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 enum ViewState: SnazzyState {
@@ -15,29 +14,29 @@ extension View {
 
 struct ContentView: View {
 	var body:some View {
-		//		Throw in the navigation view as you would any other SwiftUI view. You can also pass in the navigator from the outside. If you don't it will instantiate a SnazzyNavigator for you that gets passed into the state resolving closure.
+		//	Throw in the navigation view as you would any other SwiftUI view. You can also pass in the navigator from the outside. If you don't it will instantiate a SnazzyNavigator for you that gets passed into the state resolving closure.
 		SnazzyNavigationView(initialState: ViewState.red) { (state, navigator) -> AnyView in
-			//			In here return an AnyView as you please. This view will be navigated to.
+			//	In here return an AnyView as you please. This view will be navigated to.
 			switch state {
 				case .red:
 					let viewModel = Red.ViewModel(navigating: navigator)
 					return Red(model: viewModel).eraseToAnyView()
 				case .orange(let text):
-					//					We parse in variables from the unresolved state to the model!
+					//	We parse in variables from the unresolved state to the model!
 					let viewModel = Orange.ViewModel(title: text, navigating: navigator)
 					return Orange(model: viewModel).eraseToAnyView()
 				case .blue:
-					//					Views can have different models!
+					//	Views can have different models!
 					let viewModel = Blue.ViewModel(navigating: navigator)
 					return Blue(model: viewModel).eraseToAnyView()
 				case .purple:
 					let viewModel = Purple.ViewModel(navigating: navigator)
 					return Purple(model: viewModel).eraseToAnyView()
 				case .gray:
-					//					Some views don't even have models?!
+					//	Some views don't even have models?!
 					return MultipColorView(unwind: navigator.unwind, color: Color.gray).eraseToAnyView()
 				case .pink:
-					//					Wow, you can use the same view again and again! The possibilities are endless
+					//	Wow, you can use the same view again and again! The possibilities are endless
 					return MultipColorView(unwind: navigator.unwind, color: Color.pink).eraseToAnyView()
 			}
 		}
@@ -45,16 +44,16 @@ struct ContentView: View {
 }
 
 struct Red: View {
-	
+
 	struct ViewModel {
 		let navigating: SnazzyNavigator<ViewState>
 	}
-	
+
 	var model: ViewModel
-	
+
 	var body: some View {
 		VStack {
-			
+
 			HStack {
 				Button(action: {
 					withAnimation {
@@ -63,9 +62,9 @@ struct Red: View {
 				}) {
 					Image(systemName: "chevron.left")
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.transition(.pink, edge: .top)
@@ -73,9 +72,9 @@ struct Red: View {
 				}) {
 					Text("Pink ↑")
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.transition(.orange("I came from red!"), edge: .trailing)
@@ -91,18 +90,18 @@ struct Red: View {
 }
 
 struct Orange: View {
-	
+
 	struct ViewModel {
 		let title: String
 		let navigating: SnazzyNavigator<ViewState>
 	}
-	
+
 	var model: ViewModel
-	
+
 	var body: some View {
 		VStack {
 			HStack {
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.unwind()
@@ -110,9 +109,9 @@ struct Orange: View {
 				}) {
 					Image(systemName: "chevron.left")
 				}
-				
+
 				Spacer()
-				
+
 				VStack {
 					Button(action: {
 						withAnimation {
@@ -121,7 +120,7 @@ struct Orange: View {
 					}) {
 						Text("Gray ↑")
 					}
-					
+
 					Button(action: {
 						withAnimation {
 							self.model.navigating.transition(.purple, edge: .bottom)
@@ -129,11 +128,11 @@ struct Orange: View {
 					}) {
 						Text("Purple ↓")
 					}
-					
+
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.transition(.blue, edge: .trailing)
@@ -146,23 +145,23 @@ struct Orange: View {
 			Text(model.title)
 			Color.orange
 		}
-		
+
 	}
 }
 
 struct Blue: View {
-	
+
 	struct ViewModel {
 		let navigating: SnazzyNavigator<ViewState>
 	}
-	
+
 	var model: ViewModel
-	
+
 	var body: some View {
-		
+
 		VStack {
 			HStack {
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.unwind()
@@ -170,9 +169,9 @@ struct Blue: View {
 				}) {
 					Image(systemName: "chevron.left")
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.transition(.red, edge: .trailing)
@@ -188,15 +187,15 @@ struct Blue: View {
 }
 
 struct MultipColorView: View {
-	
-	var unwind:()->()
-	var color:Color
-	
+
+	var unwind:()->Void
+	var color: Color
+
 	var body: some View {
-		
+
 		VStack {
 			HStack {
-				
+
 				Button(action: {
 					withAnimation {
 						self.unwind()
@@ -204,10 +203,9 @@ struct MultipColorView: View {
 				}) {
 					Image(systemName: "chevron.left")
 				}
-				
+
 				Spacer()
-				
-				
+
 			}
 			.padding(10)
 			self.color
@@ -215,21 +213,19 @@ struct MultipColorView: View {
 	}
 }
 
-
-
 struct Purple: View {
-	
+
 	struct ViewModel {
 		let navigating: SnazzyNavigator<ViewState>
 	}
-	
+
 	var model: ViewModel
-	
+
 	var body: some View {
-		
+
 		VStack {
 			HStack {
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.unwind()
@@ -237,9 +233,9 @@ struct Purple: View {
 				}) {
 					Image(systemName: "chevron.left")
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.unwind(.root)
@@ -247,9 +243,9 @@ struct Purple: View {
 				}) {
 					Text("Pop all views")
 				}
-				
+
 				Spacer()
-				
+
 				Button(action: {
 					withAnimation {
 						self.model.navigating.transition(.orange("I came from purple!"), edge: .leading)
