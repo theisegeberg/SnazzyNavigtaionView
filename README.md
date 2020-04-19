@@ -2,7 +2,12 @@
 
 Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic. The pseudo navigation bars below are completely optional, you can implement navigation in any way you want to.
 
-![Example](https://i.imgur.com/0UuDX4Z.gif)
+| ColorViewSample.swift | LoginSample.swift |
+| --- | --- |
+
+![Example1](https://i.imgur.com/0UuDX4Z.gif)
+![Example2](https://i.imgur.com/uKI29TJ.gif)
+
 
 ## Getting Started
 
