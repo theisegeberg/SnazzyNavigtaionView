@@ -8,7 +8,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	@Published var currentTransition: TransitionType
 
-	init(view initialView: NavigatableState) {
+	public init(view initialView: NavigatableState) {
 		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
