@@ -2,6 +2,8 @@
 
 Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic.
 
+[Example](https://i.imgur.com/0UuDX4Z.gif)
+
 ## Getting Started
 
 ### Prerequisites
@@ -147,4 +149,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 * Jonathan McAllister [https://github.com/Joony](https://github.com/Joony), for providing most of the inpsiration for the resolver pattern, and for teaching me the mindset of a programmer.
-* Srđan Rašić [https://github.com/srdanrasic](https://github.com/srdanrasic), for the foundational patterns used in this.
+* Srđan Rašić [https://github.com/srdanrasic](https://github.com/srdanrasic), for the inspiration from the binder pattern that this mimics to some extent.
