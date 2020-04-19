@@ -4,10 +4,7 @@ Based on SwiftUI this view handles navigation between views in a simple and appe
 
 | ColorViewSample.swift | LoginSample.swift |
 | --- | --- |
-
-![Example1](https://i.imgur.com/0UuDX4Z.gif)
-![Example2](https://i.imgur.com/uKI29TJ.gif)
-
+| ![Example1](https://i.imgur.com/0UuDX4Z.gif) | ![Example2](https://i.imgur.com/uKI29TJ.gif) |
 
 ## Getting Started
 
