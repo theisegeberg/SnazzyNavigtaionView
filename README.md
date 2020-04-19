@@ -29,7 +29,7 @@ dependencies: [
 
 ## Quick start
 
-
+Full sample code with helpful commentary: [SampleCode/ColoredViewSample.swift](Sources/SnazzyNavigationView/SampleCode/ColoredViewSample.swift)
 
 Import SwiftUI and SnazzyNavigationView
 ```swift
@@ -37,17 +37,21 @@ import SwiftUI
 import SnazzyNavigationView
 ```
 
-
+First off we'll define our states. These are the things Snazzy navigates between. The easiest way is just to use an enum, but you can really use anything that implements `SnazzyState`. In this case we'll do a range of colors that corresponds to the views we'll show later.
 ```swift
-
-import SwiftUI
-import SnazzyNavigationView
-
 enum ViewState: SnazzyState {
-	case a, b(String), c
+	case red, orange(String), blue, purple, gray, pink
 }
+```
 
+
+
+We'll add the `eraseToAnyView` helper function on View. Then we'll create `ContentView` to hold our `SnazzyNavigationView`. The initializer will take a resolver that turns a `SnazzyState` (the `ViewState` from just above) into an `AnyView`. This example is pretty linear. Almost all states have a dedicated view, except for `gray` and `pink` which reuses the same view. 
+Most views have a dedicated `ViewModel` but that's not required. For most apps though, it's recommended to send information through the state into the viewmodel and then into the view. 
+*) If you need to access the navigator from outside of the navigation view, you can pass in a `SnazzyNavigator` into the `SnazzyNavigationView` initiliazer.
+```swift
 extension View {
+	//	This is just a helper function, how long till this is incporporated into SwiftUI I wonder?
 	func eraseToAnyView() -> AnyView {
 		return AnyView(self)
 	}
@@ -55,166 +59,83 @@ extension View {
 
 struct ContentView: View {
 	var body:some View {
-		SnazzyNavigationView(initialState: ViewState.a) { (state, navigator) -> AnyView in
+		// Throw in the navigation view as you would any other SwiftUI view. You can also pass in the navigator from the outside. If you don't it will instantiate a SnazzyNavigator for you that gets passed into the state resolving closure.
+		SnazzyNavigationView(initialState: ViewState.red) { (state, navigator) -> AnyView in
+			// In here return an AnyView as you please. This view will be navigated to.
 			switch state {
-				case .a:
-					let viewModel = ViewA.ViewModel(title: "x", navigating: navigator)
-					return ViewA(model: viewModel).eraseToAnyView()
-				case .b(let text):
-					let viewModel = ViewB.ViewModel(title: text, navigating: navigator)
-					return ViewB(model: viewModel).eraseToAnyView()
-				case .c:
-					let viewModel = ViewC.ViewModel(title: "X", navigating: navigator)
-					return ViewC(model: viewModel).eraseToAnyView()
+				case .red:
+					let viewModel = Red.ViewModel(navigating: navigator)
+					return Red(model: viewModel).eraseToAnyView()
+				case .orange(let text):
+					// We parse in variables from the unresolved state to the model!
+					let viewModel = Orange.ViewModel(title: text, navigating: navigator)
+					return Orange(model: viewModel).eraseToAnyView()
+				case .blue:
+					// Views can have different models!
+					let viewModel = Blue.ViewModel(navigating: navigator)
+					return Blue(model: viewModel).eraseToAnyView()
+				case .purple:
+					let viewModel = Purple.ViewModel(navigating: navigator)
+					return Purple(model: viewModel).eraseToAnyView()
+				case .gray:
+					// Some views don't even have models?!
+					return MultipColorView(unwind: navigator.unwind, color: Color.gray).eraseToAnyView()
+				case .pink:
+					// Wow, you can use the same view again and again! The possibilities are endless
+					return MultipColorView(unwind: navigator.unwind, color: Color.pink).eraseToAnyView()
 			}
 		}
 	}
 }
+```
 
-struct ViewA: View {
-
+Here's what a view looks like. No magic here, the rest of the views code can be found in the sample code linked to aboce.
+```swift
+struct Red: View {
+	
 	struct ViewModel {
-		let title: String
 		let navigating: AnyNavigator<ViewState>
 	}
-
+	
 	var model: ViewModel
-
+	
 	var body: some View {
 		VStack {
-
-			Button(action: {
-				withAnimation {
-					self.model.navigating.transition(.b("Hello world"), edge: .trailing)
-				}
-			}) {
-				Text(">>")
-			}
-			Button(action: {
-				withAnimation {
-					self.model.navigating.unwind()
-				}
-			}) {
-				Text("unwind")
-			}
-			Color.red
-		}.frame(maxWidth: .infinity)
-	}
-}
-
-struct ViewB: View {
-
-	struct ViewModel {
-		let title: String
-		let navigating: AnyNavigator<ViewState>
-	}
-
-	var model: ViewModel
-
-	@State var someText = UUID().uuidString
-
-	var body: some View {
-		VStack {
+			
 			HStack {
-				Button(action: {
-					withAnimation {
-						self.model.navigating.transition(.a, edge: .leading)
-					}
-				}) {
-					Text("<<")
-				}
-
-				Button(action: {
-					self.model.navigating.transition(.b("Hullaballoo"), edge: .trailing)
-				}) {
-					Text("stay")
-				}
-
 				Button(action: {
 					withAnimation {
 						self.model.navigating.unwind()
 					}
 				}) {
-					Text("unwind")
+					Image(systemName: "chevron.left")
 				}
-
+				
+				Spacer()
+				
 				Button(action: {
 					withAnimation {
-						self.model.navigating.transition(.c, edge: .bottom)
+						self.model.navigating.transition(.pink, edge: .top)
 					}
 				}) {
-					Text(">>")
+					Text("Pink ↑")
+				}
+				
+				Spacer()
+				
+				Button(action: {
+					withAnimation {
+						self.model.navigating.transition(.orange("I came from red!"), edge: .trailing)
+					}
+				}) {
+					Text("Orange →")
 				}
 			}
-			Button(action: {
-				self.someText = UUID().uuidString
-			}) {
-				Text("change state")
-			}
-			Text(model.title)
-			Text(self.someText)
-			Color.orange
-		}.frame(maxWidth: .infinity)
-
+			.padding(10)
+			Color.red
+		}
 	}
 }
-
-struct ViewC: View {
-
-	struct ViewModel {
-		let title: String
-		let navigating: AnyNavigator<ViewState>
-	}
-
-	var model: ViewModel
-
-	var body: some View {
-
-		VStack {
-			Button(action: {
-				withAnimation {
-					self.model.navigating.transition(.b("From before"), edge: .leading)
-				}
-			}) {
-				Text("<<")
-			}
-
-			Button(action: {
-				withAnimation {
-					self.model.navigating.transition(.a, edge: .trailing)
-				}
-			}) {
-				Text(">>")
-			}
-			Button(action: {
-				withAnimation {
-					self.model.navigating.unwind(.upTo(2))
-				}
-			}) {
-				Text("<<2")
-			}
-			Button(action: {
-				withAnimation {
-					self.model.navigating.unwind(.upTo(3))
-				}
-			}) {
-				Text("<<3")
-			}
-			Button(action: {
-				withAnimation {
-					self.model.navigating.unwind()
-				}
-			}) {
-				Text("unwind")
-			}
-			Color.blue
-		}.frame(maxWidth: .infinity)
-	}
-}
-
-
-
-
 ```
 
 ## Authors
