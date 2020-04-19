@@ -29,15 +29,15 @@ dependencies: [
 
 ## Quick start
 
-Full sample code with helpful commentary: [SampleCode/ColoredViewSample.swift](Sources/SnazzyNavigationView/SampleCode/ColoredViewSample.swift)
+**Full sample code with helpful commentary: [SampleCode/ColoredViewSample.swift](Sources/SnazzyNavigationView/SampleCode/ColoredViewSample.swift)**
 
-Import SwiftUI and SnazzyNavigationView
+1. Import SwiftUI and SnazzyNavigationView
 ```swift
 import SwiftUI
 import SnazzyNavigationView
 ```
 
-First off we'll define our states. These are the things Snazzy navigates between. The easiest way is just to use an enum, but you can really use anything that implements `SnazzyState`. In this case we'll do a range of colors that corresponds to the views we'll show later.
+2. First off we'll define our states. These are the things Snazzy navigates between. The easiest way is just to use an enum, but you can really use anything that implements `SnazzyState`. In this case we'll do a range of colors that corresponds to the views we'll show later.
 ```swift
 enum ViewState: SnazzyState {
 	case red, orange(String), blue, purple, gray, pink
@@ -46,9 +46,7 @@ enum ViewState: SnazzyState {
 
 
 
-We'll add the `eraseToAnyView` helper function on View. Then we'll create `ContentView` to hold our `SnazzyNavigationView`. The initializer will take a resolver that turns a `SnazzyState` (the `ViewState` from just above) into an `AnyView`. This example is pretty linear. Almost all states have a dedicated view, except for `gray` and `pink` which reuses the same view. 
-Most views have a dedicated `ViewModel` but that's not required. For most apps though, it's recommended to send information through the state into the viewmodel and then into the view. 
-*) If you need to access the navigator from outside of the navigation view, you can pass in a `SnazzyNavigator` into the `SnazzyNavigationView` initiliazer.
+3. We'll add the `eraseToAnyView` helper function on View. Then we'll create `ContentView` to hold our `SnazzyNavigationView`. The initializer will take a resolver that turns a `SnazzyState` (the `ViewState` from just above) into an `AnyView`. This example is pretty linear. Almost all states have a dedicated view, except for `gray` and `pink` which reuses the same view.  Most views have a dedicated `ViewModel` but that's not required. For most apps though, it's recommended to send information through the state into the viewmodel and then into the view. If you need to access the navigator from outside of the navigation view, you can pass in a `SnazzyNavigator` into the `SnazzyNavigationView` initiliazer.
 ```swift
 extension View {
 	//	This is just a helper function, how long till this is incporporated into SwiftUI I wonder?
