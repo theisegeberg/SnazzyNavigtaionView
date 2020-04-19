@@ -47,7 +47,7 @@ struct ContentView: View {
 struct Red: View {
 	
 	struct ViewModel {
-		let navigating: AnyNavigator<ViewState>
+		let navigating: SnazzyNavigator<ViewState>
 	}
 	
 	var model: ViewModel
@@ -94,7 +94,7 @@ struct Orange: View {
 	
 	struct ViewModel {
 		let title: String
-		let navigating: AnyNavigator<ViewState>
+		let navigating: SnazzyNavigator<ViewState>
 	}
 	
 	var model: ViewModel
@@ -153,7 +153,7 @@ struct Orange: View {
 struct Blue: View {
 	
 	struct ViewModel {
-		let navigating: AnyNavigator<ViewState>
+		let navigating: SnazzyNavigator<ViewState>
 	}
 	
 	var model: ViewModel
@@ -220,7 +220,7 @@ struct MultipColorView: View {
 struct Purple: View {
 	
 	struct ViewModel {
-		let navigating: AnyNavigator<ViewState>
+		let navigating: SnazzyNavigator<ViewState>
 	}
 	
 	var model: ViewModel

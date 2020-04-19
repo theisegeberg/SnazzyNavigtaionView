@@ -12,7 +12,7 @@ public extension SnazzyState {
 
 public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 
-	public typealias ResolverType = (NavigatableState, AnyNavigator<NavigatableState>) -> AnyView
+	public typealias ResolverType = (NavigatableState, SnazzyNavigator<NavigatableState>) -> AnyView
 
 	@ObservedObject var navigator: SnazzyNavigator<NavigatableState>
 
@@ -20,19 +20,17 @@ public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 
 	public init(initialState: NavigatableState, _ resolver:@escaping ResolverType) {
 		self.resolver = resolver
-		let navigator = SnazzyNavigator(view: initialState)
-		self.navigator = navigator
+		self.navigator = SnazzyNavigator(view: initialState)
 	}
 	
-	public init<N:Navigating>(initialState: NavigatableState, navigator:N, _ resolver:@escaping ResolverType) where N.NavigatableState == NavigatableState {
+	public init(navigator:SnazzyNavigator<NavigatableState>, _ resolver:@escaping ResolverType) {
 		self.resolver = resolver
-		let navigator = SnazzyNavigator(view: initialState)
 		self.navigator = navigator
 	}
 	
 
 	func getView(_ state: NavigatableState) -> AnyView {
-		return resolver(state, self.navigator.eraseToAnyNavigator())
+		return resolver(state, self.navigator)
 	}
 
 	public var body: some View {

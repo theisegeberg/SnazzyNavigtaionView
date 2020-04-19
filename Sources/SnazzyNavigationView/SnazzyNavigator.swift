@@ -1,6 +1,6 @@
 import SwiftUI
 
-public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject, Navigating {
+public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	typealias TransitionType = ViewTransition<NavigatableState>
 
@@ -22,7 +22,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject, N
 		}
 		self.currentTransition = transition
 	}
-
+	
 	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
 	}

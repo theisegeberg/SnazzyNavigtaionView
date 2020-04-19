@@ -1,6 +1,6 @@
 # SnazzyNavigationView
 
-Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic.
+Based on SwiftUI this view handles navigation between views in a simple and appeasing way. It does not build on top of the NavigationView but is pure SwiftUI magic. The pseudo navigation bars below are completely optional, you can implement navigation in any way you want to.
 
 ![Example](https://i.imgur.com/0UuDX4Z.gif)
 
@@ -94,7 +94,7 @@ Here's what a view looks like. No magic here, the rest of the views code can be 
 struct Red: View {
 	
 	struct ViewModel {
-		let navigating: AnyNavigator<ViewState>
+		let navigating: SnazzyNavigator<ViewState>
 	}
 	
 	var model: ViewModel
