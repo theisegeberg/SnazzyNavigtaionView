@@ -2,19 +2,19 @@ import SwiftUI
 
 public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
-	typealias TransitionType = ViewTransition<NavigatableState>
+	typealias T = ViewTransition<NavigatableState>
 
-	var history: [TransitionType]
+	var history: [T]
 
-	@Published var currentTransition: TransitionType
+	@Published var currentTransition: T
 
 	public init(view initialView: NavigatableState) {
-		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
+		let initialTransition = T(view: initialView, type: .edge(.leading), unwindType: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
 	}
 
-	func transition(_ transition: TransitionType, clearHistory: Bool) {
+	func transition(_ transition: T, clearHistory: Bool) {
 		if clearHistory {
 			self.history = [transition]
 		} else {
@@ -23,12 +23,17 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 		self.currentTransition = transition
 	}
 
-	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
-		self.transition(ViewTransition(view: view, edge: edge, unwoundEdge: nil), clearHistory: clearHistory)
-	}
-
 	public func transition(_ view: NavigatableState, edge: Edge) {
 		self.transition(view, edge: edge, clearHistory: false)
+	}
+
+	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
+		self.transition(ViewTransition(view: view, type: .edge(edge), unwindType: nil), clearHistory: clearHistory)
+		self.transition(view, type: .edge(edge), clearHistory: clearHistory)
+	}
+	
+	public func transition(_ view: NavigatableState, type: TransitionType, clearHistory: Bool = false) {
+		self.transition(ViewTransition(view: view, type: type, unwindType: nil), clearHistory: clearHistory)
 	}
 
 	public func unwind() {
@@ -41,7 +46,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 			return
 		}
 
-		let target: ViewTransition<NavigatableState>
+		let targetTransition: ViewTransition<NavigatableState>
 
 		switch distance {
 			case .one:
@@ -58,20 +63,22 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 					targetIndex = 0
 				}
 
-				target = history[targetIndex]
+				targetTransition = history[targetIndex]
 				let current = history.last!
 
 				history = Array(history[0..<targetIndex])
 
-				let state = target.view
-				let edge: Edge
-				if let unwoundEdge = current.unwoundEdge {
-					edge = unwoundEdge
+				
+				let targetView = targetTransition.view
+				
+				let transitionType: TransitionType
+				if let unwindType = current.unwindType {
+					transitionType = unwindType
 				} else {
-					edge = current.edge
+					transitionType = current.type
 				}
 
-				self.transition(ViewTransition(view: state, edge: edge.opposing, unwoundEdge: target.edge), clearHistory: false)
+				self.transition(ViewTransition(view: targetView, type: transitionType.opposing, unwindType: targetTransition.type), clearHistory: false)
 		}
 
 	}

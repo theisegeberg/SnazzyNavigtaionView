@@ -34,7 +34,7 @@ public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 	public var body: some View {
 		VStack {
 			getView(self.navigator.currentTransition.view).id(self.navigator.currentTransition.view.id)
-				.modifier(OpposingMoveTransitionModifier(edge: self.$navigator.currentTransition.edge))
+				.modifier(OpposingMoveTransitionModifier(type: self.$navigator.currentTransition.type))
 		}
 	}
 }
