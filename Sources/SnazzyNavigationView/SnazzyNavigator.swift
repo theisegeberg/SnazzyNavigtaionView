@@ -85,3 +85,11 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	}
 
 }
+
+public extension SnazzyNavigator where NavigatableState:CaseIterable,NavigatableState:Equatable {
+	
+	func next() {
+		self.transition(self.currentTransition.view.next, edge: self.currentTransition.edge)
+	}
+	
+}
