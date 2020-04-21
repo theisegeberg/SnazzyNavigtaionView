@@ -25,7 +25,7 @@ extension View {
 
 struct CanLogOutKey: PreferenceKey {
 	static var defaultValue: Bool = false
-	
+
 	static func reduce(value: inout Bool, nextValue: () -> Bool) {
 		value = nextValue()
 	}
@@ -33,7 +33,7 @@ struct CanLogOutKey: PreferenceKey {
 
 struct LocalNavigationBarTitleKey: PreferenceKey {
 	static var defaultValue: String = ""
-	
+
 	static func reduce(value: inout String, nextValue: () -> String) {
 		value = nextValue()
 	}
@@ -46,12 +46,12 @@ extension View {
 }
 
 struct ContentView: View {
-	
+
 	@State var title: String = "-"
 	@State var canLogOut: Bool = false
-	
+
 	let navigator = SnazzyNavigator(view: ViewState.intro)
-	
+
 	func getView(state: ViewState, navigator: SnazzyNavigator<ViewState>) -> AnyView {
 		switch state {
 			case .intro:
@@ -66,7 +66,7 @@ struct ContentView: View {
 				return MailBoxView(token: token).eraseToAnyView()
 		}
 	}
-	
+
 	var body: some View {
 		VStack {
 			ZStack {
@@ -80,9 +80,9 @@ struct ContentView: View {
 							Image(systemName: "chevron.left")
 						}.transition(.move(edge: .leading))
 					}
-					
+
 					Spacer()
-					
+
 					if self.canLogOut {
 						Button(action: {
 							withAnimation {
@@ -92,10 +92,10 @@ struct ContentView: View {
 							Text("Logout")
 						}.transition(.move(edge: .trailing))
 					}
-					
+
 				}
 				Text(self.title).id(self.title.hashValue).transition(.opacity).font(Font.system(.title))
-				
+
 			}
 			.padding(10)
 			SnazzyNavigationView(navigator: navigator, self.getView)
@@ -112,13 +112,13 @@ struct ContentView: View {
 }
 
 struct IntroView: View {
-	
+
 	let navigator: SnazzyNavigator<ViewState>
-	
+
 	var body: some View {
 		ZStack {
 			Color.blue
-			VStack(spacing:10) {
+			VStack(spacing: 10) {
 				Button(action: {
 					withAnimation {
 						self.navigator.transition(.login, edge: .trailing)
@@ -149,25 +149,25 @@ struct GuideView: View {
 			}
 		}.foregroundColor(.white)
 			.preference(key: LocalNavigationBarTitleKey.self, value: "Guide")
-		
+
 	}
 }
 
 struct LoginView: View {
-	
+
 	class LoginSession: ObservableObject {
 		@Published var username: String = "John"
 		@Published var password: String = "Password"
 		private let _loginPublisher: PassthroughSubject<Result<LoginToken, LoginSessionError>, Never>
 		let loginPublisher: AnyPublisher<Result<LoginToken, LoginSessionError>, Never>
-		
+
 		let database: UserDatabase
-		
+
 		var cancellable: AnyCancellable?
-		
+
 		enum LoginSessionError: Error {
 			case usernameOrPasswordInvalid
-			
+
 			var localizedDescription: String {
 				switch self {
 					case .usernameOrPasswordInvalid:
@@ -175,25 +175,25 @@ struct LoginView: View {
 				}
 			}
 		}
-		
+
 		init(_ database: UserDatabase) {
 			self.database = database
 			let passthrough = PassthroughSubject<Result<LoginToken, LoginSessionError>, Never>()
 			self._loginPublisher = passthrough
 			self.loginPublisher = passthrough.eraseToAnyPublisher()
 		}
-		
+
 		func clear() {
 			self.username = ""
 			self.password = ""
 		}
-		
+
 		func login() {
-			
+
 			let database = UserDatabase()
-			
+
 			print("Hello world")
-			
+
 			self.cancellable = self.$username
 				.combineLatest(self.$password)
 				.map { (username, password) in
@@ -204,14 +204,14 @@ struct LoginView: View {
 			}.sink(receiveValue: { (result) in
 				self._loginPublisher.send(result)
 			})
-			
+
 		}
-		
+
 	}
-	
+
 	@ObservedObject var session: LoginSession
 	var navigator: SnazzyNavigator<ViewState>
-	
+
 	var body: some View {
 		ZStack {
 			Color.blue
@@ -229,7 +229,7 @@ struct LoginView: View {
 					Button(action: self.session.clear) {
 						Text("Clear").padding(10).background(RoundedRectangle(cornerRadius: 5).fill(Color.white)).foregroundColor(Color.blue)
 					}
-					
+
 				}
 			}.padding(20)
 		}
@@ -242,25 +242,25 @@ struct LoginView: View {
 						self.navigator.transition(.error(error.localizedDescription), edge: .trailing)
 					case .success(let token):
 						self.navigator.transition(.mailbox(token), edge: .trailing, clearHistory: true)
-					
+
 				}
 			}
 		}
-		
+
 	}
 }
 
 struct ErrorView: View {
-	
+
 	var errorDescription: String
-	
+
 	var body: some View {
 		ZStack {
 			Color.red
 			VStack {
 				Text(errorDescription)
 			}
-			
+
 		}
 		.foregroundColor(.white)
 		.preference(key: LocalNavigationBarTitleKey.self, value: "Error!")
@@ -268,9 +268,9 @@ struct ErrorView: View {
 }
 
 struct MailBoxView: View {
-	
+
 	var token: LoginToken
-	
+
 	var body: some View {
 		ZStack {
 			Color.green
@@ -287,4 +287,3 @@ struct MailBoxView: View {
 		.preference(key: CanLogOutKey.self, value: true)
 	}
 }
-

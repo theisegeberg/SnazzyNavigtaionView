@@ -1,7 +1,7 @@
 import SwiftUI
 import SnazzyNavigationView
 
-fileprivate enum ViewState: SnazzyState {
+private enum ViewState: SnazzyState {
 	//	First off we define each of our states. The state must implement the SnazzyState protocol. Some magic goes on behind the scenes here, but basically it's just to be able to identify views and states uniquely. In this case we'll just make a state for each of our views, but you're not limited to that.
 	case red, orange(String), blue, purple, gray, pink
 }
@@ -189,7 +189,7 @@ struct Blue: View {
 
 struct MultipColorView: View {
 
-	var unwind:()->Void
+	var unwind:() -> Void
 	var color: Color
 
 	var body: some View {

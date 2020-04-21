@@ -8,10 +8,10 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	@Published var currentTransition: TransitionType
 
-	public var currentState:NavigatableState {
+	public var currentState: NavigatableState {
 		return self.currentTransition.view
 	}
-	
+
 	public init(view initialView: NavigatableState) {
 		let initialTransition = TransitionType(view: initialView, edge: .leading, unwoundEdge: nil)
 		self.history = [initialTransition]
@@ -86,10 +86,10 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 }
 
-public extension SnazzyNavigator where NavigatableState:CaseIterable,NavigatableState:Equatable {
-	
+public extension SnazzyNavigator where NavigatableState: CaseIterable, NavigatableState: Equatable {
+
 	func next() {
 		self.transition(self.currentTransition.view.next, edge: self.currentTransition.edge)
 	}
-	
+
 }
