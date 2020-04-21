@@ -13,7 +13,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	}
 
 	public init(view initialView: NavigatableState) {
-		let initialTransition = T(view: initialView, type: .none, unwindType: nil)
+		let initialTransition = T(view: initialView, type: .none)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
 	}
@@ -32,11 +32,11 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	}
 
 	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
-		self.transition(ViewTransition(view: view, type: .edge(edge), unwindType: nil), clearHistory: clearHistory)
+		self.transition(ViewTransition(view: view, type: .edge(edge)), clearHistory: clearHistory)
 	}
 	
 	public func transition(_ view: NavigatableState, type: TransitionType, clearHistory: Bool = false) {
-		self.transition(ViewTransition(view: view, type: type, unwindType: nil), clearHistory: clearHistory)
+		self.transition(ViewTransition(view: view, type: type), clearHistory: clearHistory)
 	}
 
 	public func unwind() {
@@ -49,7 +49,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 			return
 		}
 
-		let targetTransition: ViewTransition<NavigatableState>
+		
 
 		switch distance {
 			case .one:
@@ -65,25 +65,12 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 					targetIndex = 0
 				}
 
-				targetTransition = history[targetIndex]
+				let targetTransition = history[targetIndex]
 				let current = history.last!
 
-				history = Array(history[0..<targetIndex])
+				history = Array(history[0..<targetIndex + 1])
 
-				let targetView = targetTransition.view
-				
-				let nextTransitionType: TransitionType
-				let unwindTransitionType: TransitionType
-
-				if let unwindType = current.unwindType {
-					nextTransitionType = unwindType
-					unwindTransitionType = unwindType
-				} else {
-					nextTransitionType = current.type
-					unwindTransitionType = targetTransition.type
-				}
-
-				self.transition(ViewTransition(view: targetView, type: nextTransitionType.opposing, unwindType: unwindTransitionType), clearHistory: false)
+				self.currentTransition = ViewTransition(view: targetTransition.view, type: current.type.opposing)
 		}
 
 	}
@@ -97,7 +84,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 public extension SnazzyNavigator where NavigatableState: CaseIterable, NavigatableState: Equatable {
 
 	func next() {
-		self.transition(self.currentTransition.view.next, edge: self.currentTransition.edge)
+		self.transition(self.currentTransition.view.next, type: self.currentTransition.type)
 	}
 
 }
