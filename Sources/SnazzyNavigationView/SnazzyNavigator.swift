@@ -12,8 +12,12 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 		return self.currentTransition.view
 	}
 
-	public init(view initialView: NavigatableState) {
-		let initialTransition = T(view: initialView, type: .none)
+	public convenience init(view initialView: NavigatableState) {
+		self.init(view: initialView, type: .none)
+	}
+	
+	public init(view initialView: NavigatableState, type:TransitionType) {
+		let initialTransition = T(view: initialView, type: type)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
 	}
