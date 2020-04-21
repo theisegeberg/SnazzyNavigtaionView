@@ -8,6 +8,10 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	@Published var currentTransition: T
 
+	public var currentState: NavigatableState {
+		return self.currentTransition.view
+	}
+
 	public init(view initialView: NavigatableState) {
 		let initialTransition = T(view: initialView, type: .none, unwindType: nil)
 		self.history = [initialTransition]
@@ -86,6 +90,14 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	public func canUnwind() -> Bool {
 		return (history.count > 1)
+	}
+
+}
+
+public extension SnazzyNavigator where NavigatableState: CaseIterable, NavigatableState: Equatable {
+
+	func next() {
+		self.transition(self.currentTransition.view.next, edge: self.currentTransition.edge)
 	}
 
 }

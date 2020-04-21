@@ -1,15 +1,5 @@
 import SwiftUI
 
-public protocol SnazzyState: Identifiable {
-	var id: Int { get }
-}
-
-public extension SnazzyState {
-	var id: Int {
-		return String(describing: self).hashValue
-	}
-}
-
 public struct SnazzyNavigationView<NavigatableState: SnazzyState>: View {
 
 	public typealias ResolverType = (NavigatableState, SnazzyNavigator<NavigatableState>) -> AnyView
