@@ -3,15 +3,15 @@ import SwiftUI
 public indirect enum TransitionType {
 	case
 	edge(Edge),
-	opacity(Double,Double),
+	opacity,
 	none
 	
 	var opposing:TransitionType {
 		switch self {
 			case .edge(let edge):
 				return .edge(edge.opposing)
-			case let .opacity(start, end):
-				return .opacity(end, start)
+			case .opacity:
+				return .opacity
 			case .none:
 				return .none
 		}

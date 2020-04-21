@@ -9,7 +9,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	@Published var currentTransition: T
 
 	public init(view initialView: NavigatableState) {
-		let initialTransition = T(view: initialView, type: .edge(.leading), unwindType: nil)
+		let initialTransition = T(view: initialView, type: .none, unwindType: nil)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
 	}
@@ -29,7 +29,6 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, type: .edge(edge), unwindType: nil), clearHistory: clearHistory)
-		self.transition(view, type: .edge(edge), clearHistory: clearHistory)
 	}
 	
 	public func transition(_ view: NavigatableState, type: TransitionType, clearHistory: Bool = false) {
@@ -56,7 +55,6 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 				self.unwind(.upTo(self.history.count))
 			case .upTo(let goBackToIndex):
 				let targetIndex: Int
-
 				if history.count > goBackToIndex {
 					targetIndex = history.count - goBackToIndex - 1
 				} else {
@@ -68,17 +66,20 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 
 				history = Array(history[0..<targetIndex])
 
-				
 				let targetView = targetTransition.view
 				
-				let transitionType: TransitionType
+				let nextTransitionType: TransitionType
+				let unwindTransitionType: TransitionType
+
 				if let unwindType = current.unwindType {
-					transitionType = unwindType
+					nextTransitionType = unwindType
+					unwindTransitionType = unwindType
 				} else {
-					transitionType = current.type
+					nextTransitionType = current.type
+					unwindTransitionType = targetTransition.type
 				}
 
-				self.transition(ViewTransition(view: targetView, type: transitionType.opposing, unwindType: targetTransition.type), clearHistory: false)
+				self.transition(ViewTransition(view: targetView, type: nextTransitionType.opposing, unwindType: unwindTransitionType), clearHistory: false)
 		}
 
 	}
