@@ -13,10 +13,10 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	}
 
 	public convenience init(view initialView: NavigatableState) {
-		self.init(view: initialView, type: .none)
+		self.init(view: initialView, type: .edge(.leading))
 	}
-	
-	public init(view initialView: NavigatableState, type:TransitionType) {
+
+	public init(view initialView: NavigatableState, type: TransitionType) {
 		let initialTransition = T(view: initialView, type: type)
 		self.history = [initialTransition]
 		self.currentTransition = initialTransition
@@ -38,7 +38,7 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 	public func transition(_ view: NavigatableState, edge: Edge, clearHistory: Bool) {
 		self.transition(ViewTransition(view: view, type: .edge(edge)), clearHistory: clearHistory)
 	}
-	
+
 	public func transition(_ view: NavigatableState, type: TransitionType, clearHistory: Bool = false) {
 		self.transition(ViewTransition(view: view, type: type), clearHistory: clearHistory)
 	}
@@ -52,8 +52,6 @@ public class SnazzyNavigator<NavigatableState: SnazzyState>: ObservableObject {
 		guard history.count > 1 else {
 			return
 		}
-
-		
 
 		switch distance {
 			case .one:

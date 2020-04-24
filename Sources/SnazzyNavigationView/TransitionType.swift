@@ -5,8 +5,8 @@ public indirect enum TransitionType {
 	edge(Edge),
 	opacity,
 	none
-	
-	var opposing:TransitionType {
+
+	var opposing: TransitionType {
 		switch self {
 			case .edge(let edge):
 				return .edge(edge.opposing)
@@ -16,5 +16,5 @@ public indirect enum TransitionType {
 				return .none
 		}
 	}
-	
+
 }
